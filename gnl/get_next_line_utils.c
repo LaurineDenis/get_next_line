@@ -6,13 +6,13 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 09:56:34 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/01 15:42:47 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/02 15:20:21 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char		*ft_strjoin(char *s1, char *s2)
+char		*ft_strfjoin(char *s1, char *s2, int is_free)
 {
 	size_t		len;
 	char		*str;
@@ -24,27 +24,15 @@ char		*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	ft_memcpy((void *)str, (const void *)s1, ft_strlen(s1));
 	ft_strlcat((char *)str, (char *)s2, len + 2);
-	return (str);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	size_t		i;
-	size_t		j;
-	char		*str;
-
-	i = ft_strlen(s1);
-	j = 0;
-	if (!(str = (char*)malloc(sizeof(char) * i + 1)))
-		return (0);
-	while (j < i)
+	if (is_free == 1)
+		free(s1);
+	else if (is_free == 2)
+		free(s2);
+	else if (is_free != 0)
 	{
-		str[j] = s1[j];
-		j++;
+		free(s1);
+		free(s2);
 	}
-	str[j] = '\0';
-	if (str == NULL)
-		return (0);
 	return (str);
 }
 
@@ -161,4 +149,22 @@ void	*ft_calloc(size_t count, size_t size)
 		return (0);
 	ft_memset(ret, 0, size * count);
 	return (ret);
+}
+
+char	*ft_strtrim(char const *s1, char const *set)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	i = 0;
+	j = ft_strlen(s1) - 1;
+	while (s1[i] && ft_strchr(set, s1[i]))
+		i++;
+	while (s1[j] && ft_strchr(set, s1[j]) && j)
+		j--;
+	if (j == 0)
+		return (ft_calloc(1, 1));
+	str = ft_substr(s1, i, j - i + 1);
+	return (str);
 }
