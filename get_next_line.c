@@ -6,7 +6,7 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 17:20:13 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/07 13:27:36 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 16:58:39 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,15 @@ int			fill_line(char **stock, char **line, int end)
 	if (value == -1)
 	{
 		value = ft_strichr(*stock, '\0');
-		if (value != -1)
-		{
-			if (!(*line = ft_subfstr(*stock, 0, value, 0)))
-				return (-1);
-			return (0);
-		}
-	}
-	if (end == 0)
-	{
-		*line = ft_calloc(1, 1);
+		if (!(*line = ft_subfstr(*stock, 0, value, 0)))
+			return (-1);
 		if (stock)
 			free(*stock);
 		*stock = ft_calloc(1, 1);
 		return (0);
 	}
+	if (end == 0)
+		return (0);
 	else
 	{
 		if (!(*line = ft_subfstr(*stock, 0, value, 0)))
@@ -89,7 +83,10 @@ int			get_next_line(int fd, char **line)
 
 	end = 1;
 	if (BUFFER_SIZE == 0 || !line || fd < 0)
+	{
+		line = NULL;
 		return (-1);
+	}
 	if (stock[fd] == NULL && !(stock[fd] = ft_calloc(1, 1)))
 		return (-1);
 	if (stock[fd] == '\0' || ft_strichr(stock[fd], '\n') == -1)

@@ -6,7 +6,7 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 13:15:27 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/07 13:09:12 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 16:51:30 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			ft_main(int ac, char **av)
 int	main(int ac, char **av)
 {
 	ft_main(ac, av);
-	// while (1)
-	// 	;
+	while (1)
+		;
 	return (0);
 }

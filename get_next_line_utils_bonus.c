@@ -6,103 +6,110 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 17:20:13 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/07 13:31:32 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 16:38:31 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-void		*ft_memcpy(void *dest, const void *src, size_t n)
+char	*ft_strfjoin(char *s1, char *s2, int is_free)
 {
-	unsigned char	*tmp_dest;
-	unsigned char	*tmp_src;
-	size_t			i;
+	size_t		len;
+	char		*str;
 
-	tmp_dest = (unsigned char *)dest;
-	tmp_src = (unsigned char *)src;
-	i = -1;
-	if (dest == 0 && src == 0)
-		return (0);
-	while (++i < n)
-		tmp_dest[i] = tmp_src[i];
-	return (dest);
+	if (!s1)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	if (!(str = (char *)ft_calloc(sizeof(char), len + 1)))
+		return (NULL);
+	ft_memcpy((void *)str, (const void *)s1, ft_strlen(s1));
+	ft_strlcat((char *)str, (char *)s2, len + 2);
+	if (is_free == 1)
+		free(s1);
+	else if (is_free == 2)
+		free(s2);
+	else if (is_free != 0)
+	{
+		free(s1);
+		free(s2);
+	}
+	return (str);
 }
 
-void		*ft_calloc(size_t count, size_t size)
+int		ft_strichr(const char *s, int c)
 {
-	void	*ret;
-
-	if (!(ret = malloc(size * count)))
-		return (0);
-	ft_memset(ret, 0, size * count);
-	return (ret);
-}
-
-size_t		ft_strlen(const char *s)
-{
-	size_t		i;
+	char	*temp_s;
+	int		i;
 
 	i = 0;
-	while (s[i])
+	temp_s = (char *)s;
+	if (!c)
+		return (ft_strlen(s));
+	while ((size_t)i < ft_strlen(s))
+	{
+		if (temp_s[i] == c)
+			return (i);
 		i++;
-	return (i);
+	}
+	return (-1);
 }
 
-int			fill_line(char **stock, char **line, int end)
+char	*ft_subfstr(char const *s, unsigned int start, size_t len, int is_free)
 {
-	int		value;
+	char	*dst;
+	size_t	i;
+	int		size;
 
-	value = ft_strichr(*stock, '\n');
-	if (value == -1)
+	i = 0;
+	if (start >= ft_strlen(s))
 	{
-		value = ft_strichr(*stock, '\0');
-		if (value != -1)
-		{
-			if (!(*line = ft_subfstr(*stock, 0, value, 0)))
-				return (-1);
-			return (0);
-		}
+		if (is_free == 1)
+			free((void *)s);
+		return (ft_calloc(1, 1));
 	}
-	if (end == 0)
+	size = (ft_strlen(s) > len) ? len : (ft_strlen(s) - start);
+	if (!(dst = (char *)malloc(sizeof(char) * size + 1)))
+		return (NULL);
+	while (i < len && s[start])
 	{
-		*line = ft_calloc(1, 1);
-		if (stock)
-			free(*stock);
-		*stock = ft_calloc(1, 1);
-		return (0);
+		dst[i] = s[start];
+		i++;
+		start++;
 	}
-	else
-	{
-		if (!(*line = ft_subfstr(*stock, 0, value, 0)))
-			return (-1);
-		if (!(*stock = ft_subfstr(*stock, value + 1, ft_strlen(*stock), 1)))
-			return (-1);
-		return (1);
-	}
+	dst[i] = '\0';
+	if (is_free == 1)
+		free((void *)s);
+	return (dst);
 }
 
-int			get_next_line(int fd, char **line)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
-	static char	*stock[4098] = {0};
-	char		buffer[BUFFER_SIZE + 1];
-	int			end;
+	size_t		n;
+	size_t		dest_size;
+	size_t		i;
 
-	end = 1;
-	if (BUFFER_SIZE == 0 || !line || fd < 0)
-		return (-1);
-	if (stock[fd] == NULL && !(stock[fd] = ft_calloc(1, 1)))
-		return (-1);
-	if (stock[fd] == '\0' || ft_strichr(stock[fd], '\n') == -1)
-	{
-		while ((end = read(fd, buffer, BUFFER_SIZE)) > 0)
-		{
-			buffer[end] = '\0';
-			stock[fd] = ft_strfjoin(stock[fd], buffer, 1);
-			if (ft_strichr(buffer, '\n') != -1)
-				break ;
-		}
-	}
-	if (end == -1)
-		return (-1);
-	return (fill_line(&stock[fd], line, end));
+	dest_size = 0;
+	n = size;
+	while (dest[dest_size] && n--)
+		dest_size++;
+	n = dest_size;
+	if (n == size)
+		return (dest_size + ft_strlen(src));
+	i = -1;
+	while (src[++i] && n < size - 1)
+		dest[n++] = src[i];
+	dest[n] = 0;
+	return (dest_size + ft_strlen(src));
+}
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	unsigned char	*temp;
+	size_t			i;
+
+	i = 0;
+	temp = (unsigned char *)b;
+	while (i < len)
+		temp[i++] = c;
+	return (b);
 }
