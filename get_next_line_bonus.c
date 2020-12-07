@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 09:56:34 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/02 15:20:21 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 13:31:39 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-char		*ft_strfjoin(char *s1, char *s2, int is_free)
+char	*ft_strfjoin(char *s1, char *s2, int is_free)
 {
 	size_t		len;
 	char		*str;
@@ -36,25 +36,25 @@ char		*ft_strfjoin(char *s1, char *s2, int is_free)
 	return (str);
 }
 
-size_t		ft_strchr(const char *s, int c)
+int		ft_strichr(const char *s, int c)
 {
 	char	*temp_s;
-	size_t	i;
+	int		i;
 
 	i = 0;
 	temp_s = (char *)s;
 	if (!c)
 		return (ft_strlen(s));
-	while (i < ft_strlen(s))
+	while ((size_t)i < ft_strlen(s))
 	{
 		if (temp_s[i] == c)
 			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_subfstr(char const *s, unsigned int start, size_t len, int is_free)
 {
 	char	*dst;
 	size_t	i;
@@ -62,7 +62,11 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	i = 0;
 	if (start >= ft_strlen(s))
+	{
+		if (is_free == 1)
+			free((void *)s);
 		return (ft_calloc(1, 1));
+	}
 	size = (ft_strlen(s) > len) ? len : (ft_strlen(s) - start);
 	if (!(dst = (char *)malloc(sizeof(char) * size + 1)))
 		return (NULL);
@@ -73,37 +77,22 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		start++;
 	}
 	dst[i] = '\0';
+	if (is_free == 1)
+		free((void *)s);
 	return (dst);
 }
 
-size_t		ft_strlen(const char *s)
-{
-	size_t		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-size_t	ft_strnlen(const char *s, size_t n)
-{
-	size_t i;
-
-	i = 0;
-	while (s[i] && n--)
-		i++;
-	return (i);
-}
-
-size_t			ft_strlcat(char *dest, const char *src, size_t size)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
 	size_t		n;
 	size_t		dest_size;
 	size_t		i;
 
-	n = ft_strnlen(dest, size);
-	dest_size = n;
+	dest_size = 0;
+	n = size;
+	while (dest[dest_size] && n--)
+		dest_size++;
+	n = dest_size;
 	if (n == size)
 		return (dest_size + ft_strlen(src));
 	i = -1;
@@ -123,48 +112,4 @@ void	*ft_memset(void *b, int c, size_t len)
 	while (i < len)
 		temp[i++] = c;
 	return (b);
-}
-
-void		*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	unsigned char	*tmp_dest;
-	unsigned char	*tmp_src;
-	size_t			i;
-
-	tmp_dest = (unsigned char *)dest;
-	tmp_src = (unsigned char *)src;
-	i = -1;
-	if (dest == 0 && src == 0)
-		return (0);
-	while (++i < n)
-		tmp_dest[i] = tmp_src[i];
-	return (dest);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*ret;
-
-	if (!(ret = malloc(size * count)))
-		return (0);
-	ft_memset(ret, 0, size * count);
-	return (ret);
-}
-
-char	*ft_strtrim(char const *s1, char const *set)
-{
-	size_t	i;
-	size_t	j;
-	char	*str;
-
-	i = 0;
-	j = ft_strlen(s1) - 1;
-	while (s1[i] && ft_strchr(set, s1[i]))
-		i++;
-	while (s1[j] && ft_strchr(set, s1[j]) && j)
-		j--;
-	if (j == 0)
-		return (ft_calloc(1, 1));
-	str = ft_substr(s1, i, j - i + 1);
-	return (str);
 }
