@@ -6,7 +6,7 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 09:56:36 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/07 11:52:11 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/10 11:35:35 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,5 @@ void	*ft_memcpy(void *dest, const void *src, size_t n);
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memset(void *b, int c, size_t len);
 char	*ft_strtrim(char const *s1, char const *set);
-void	ft_strdel(char **s);
 
 #endif

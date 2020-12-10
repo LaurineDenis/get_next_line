@@ -6,11 +6,11 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/01 09:56:34 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/07 16:59:07 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 15:57:11 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void		*ft_memcpy(void *dest, const void *src, size_t n)
 {

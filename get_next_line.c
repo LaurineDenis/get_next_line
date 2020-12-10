@@ -6,7 +6,7 @@
 /*   By: ldenis <ldenis@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 17:20:13 by ldenis            #+#    #+#             */
-/*   Updated: 2020/12/07 16:58:39 by ldenis           ###   ########lyon.fr   */
+/*   Updated: 2020/12/10 13:30:53 by ldenis           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,27 +52,29 @@ int			fill_line(char **stock, char **line, int end)
 {
 	int		value;
 
-	value = ft_strichr(*stock, '\n');
-	if (value == -1)
+	if ((value = ft_strichr(*stock, '\n')) == -1)
 	{
 		value = ft_strichr(*stock, '\0');
 		if (!(*line = ft_subfstr(*stock, 0, value, 0)))
 			return (-1);
 		if (stock)
+		{
 			free(*stock);
-		*stock = ft_calloc(1, 1);
+			*stock = NULL;
+		}
 		return (0);
 	}
 	if (end == 0)
-		return (0);
-	else
 	{
-		if (!(*line = ft_subfstr(*stock, 0, value, 0)))
-			return (-1);
-		if (!(*stock = ft_subfstr(*stock, value + 1, ft_strlen(*stock), 1)))
-			return (-1);
-		return (1);
+		free(*stock);
+		*stock = NULL;
+		return (0);
 	}
+	if (!(*line = ft_subfstr(*stock, 0, value, 0)))
+		return (-1);
+	if (!(*stock = ft_subfstr(*stock, value + 1, ft_strlen(*stock), 1)))
+		return (-1);
+	return (1);
 }
 
 int			get_next_line(int fd, char **line)
